@@ -10,7 +10,6 @@ public class CardGame {
 
     public static void main(String[] args) {
         initializeGame();
-
     }
 
     private static void initializeGame() {
@@ -39,6 +38,9 @@ public class CardGame {
             decks.add(deck);
         }
 
+        Player.setDecks(decks);
+        // So we don't have deck in the Player constructor
+
         generateCards(auxNumberPlayers);
     }
 
@@ -54,7 +56,7 @@ public class CardGame {
             auxInputPack.clear();
 
             //read input pack
-            ArrayList<String> inputPack = readFile("MultiplayerCardsGame/src/four.txt");
+            ArrayList<String> inputPack = readFile("four.txt");
 
             //validate
             //check for 8n cards (lines in file)
@@ -98,7 +100,7 @@ public class CardGame {
             int playerName = player.GetName();
             List<Card> cards = player.getCards();
             List<String> auxCards = player.getAuxCards();
-            
+
             String initialHandOutput = String.format("player %d initial hand", playerName) + String.join(" ", auxCards);
         }
 
@@ -150,14 +152,28 @@ public class CardGame {
     }
 
     private static void gameLoop() {
-        while (gameActive) {
-            for (Player player : players) {
-                new Thread(() -> Player.exchangeCards(decks)).start();
-            }
-            gameActive = !checkGameWon();
-        }
-    }
 
+        List<Thread> playerThreads = new ArrayList<>();
+
+        // Create and start a thread for each player
+        for (Player player : players) {
+            Thread playerThread = new Thread(player);
+            playerThreads.add(playerThread);
+            playerThread.start();
+        }
+
+        // Wait for all player threads to finish
+        for (Thread playerThread : playerThreads) {
+            try {
+                playerThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("All players have drawn cards. Continue with the game.");
+        //TODO not sure if this just end, could iterate and do while no winner call gameLoop again
+    }
 
 
     private static ArrayList<String> readFile(String pathName) {

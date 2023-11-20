@@ -3,10 +3,10 @@ import java.util.List;
 
 public class Player extends Thread {
     private final int name;
-
-    private List<Card> cards = new ArrayList<>();
-
-    private List<String> auxCards = new ArrayList<>();
+    private static List<CardDeck> decks; // static field
+    // Final?
+    private final List<Card> cards = new ArrayList<>();
+    private final List<String> auxCards = new ArrayList<>();
 
     public Player(int name) {
         this.name = name;
@@ -15,6 +15,7 @@ public class Player extends Thread {
     public int GetName() {
         return name;
     }
+    // TODO check why *g*etName gives error
 
     public List<Card> getCards() {
         return cards;
@@ -29,9 +30,16 @@ public class Player extends Thread {
         auxCards.add(String.valueOf(newCard.getCardValue()));
     }
 
+    public static void setDecks(List<CardDeck> decks) {
+        Player.decks = decks;
+    }
 
-
-    public void exchangeCards(List<CardDeck> decks) {
+    @Override
+    public void run() {
+        if (decks == null) {
+            throw new IllegalStateException("Decks list not set for players.");
+        }
+        System.out.println("DECK ->>" + decks);
         int leftDeckName = name;
         int rightDeckName = name + 1;
 
@@ -39,18 +47,21 @@ public class Player extends Thread {
             rightDeckName = 1;
         }
         CardDeck leftDeck = decks.get(leftDeckName); //almost certain will return error as .get is for indexes and name
+        //TODO ERROR
         // is 1-based not 0 so should be name-1 etc same for below
         CardDeck rightDeck = decks.get(rightDeckName);
+        //TODO ERROR
 
         //Gets card from left and removes it from deck
         Card drawCard = leftDeck.getCards().get(0);
+        //TODO ERROR
         this.addCard(drawCard);
         leftDeck.removeCard(drawCard);
 
         // Identifies first card which is not preferred card
         Card discardCard = new Card(-1);
 
-        for (Card card : cards){
+        for (Card card : cards) {
             if (card.getCardValue() != name) {
                 discardCard = card;
                 rightDeck.addCard(card);
