@@ -33,7 +33,6 @@ public class CardGame {
         for (int i = 0; i < auxNumberPlayers; i++) {
             Player player = new Player(i + 1);
             CardDeck deck = new CardDeck(i + 1);
-            player.start();
             players.add(player);
             decks.add(deck);
         }
@@ -56,7 +55,7 @@ public class CardGame {
             auxInputPack.clear();
 
             //read input pack
-            ArrayList<String> inputPack = readFile("four.txt");
+            ArrayList<String> inputPack = readFile("MultiplayerCardsGame/four.txt");
 
             //validate
             //check for 8n cards (lines in file)
@@ -128,6 +127,7 @@ public class CardGame {
         } else {
             for (Player player : winners) {
                 System.out.println(player.GetName() + " is a winner!");
+                System.out.println(player.getAuxCards());
             }
             return true;
         }
@@ -152,27 +152,31 @@ public class CardGame {
     }
 
     private static void gameLoop() {
+        while (gameActive){
+            List<Thread> playerThreads = new ArrayList<>();
 
-        List<Thread> playerThreads = new ArrayList<>();
-
-        // Create and start a thread for each player
-        for (Player player : players) {
-            Thread playerThread = new Thread(player);
-            playerThreads.add(playerThread);
-            playerThread.start();
-        }
-
-        // Wait for all player threads to finish
-        for (Thread playerThread : playerThreads) {
-            try {
-                playerThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            // Create and start a thread for each player
+            for (Player player : players) {
+                Thread playerThread = new Thread(player);
+                playerThreads.add(playerThread);
+                playerThread.start();
             }
-        }
 
-        System.out.println("All players have drawn cards. Continue with the game.");
-        //TODO not sure if this just end, could iterate and do while no winner call gameLoop again
+            // Wait for all player threads to finish
+            for (Thread playerThread : playerThreads) {
+                try {
+                    playerThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            gameActive = !checkGameWon();
+
+
+            System.out.println("All players have drawn cards. Continue with the game.");
+            //TODO not sure if this just end, could iterate and do while no winner call gameLoop again
+        }
     }
 
 
