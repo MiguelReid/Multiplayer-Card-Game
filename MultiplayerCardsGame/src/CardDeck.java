@@ -5,7 +5,7 @@ public class CardDeck {
 
     public int name;
 
-    List<Card> cards = new ArrayList<Card>();
+    List<Card> cards = new ArrayList<>();
 
     public CardDeck(int name){
         this.name = name;

@@ -3,9 +3,10 @@ import java.util.*;
 
 public class CardGame {
 
-    static List<Player> players = new ArrayList<Player>();
-    static Stack<Card> totalCards = new Stack<Card>();
-    static List<CardDeck> decks = new ArrayList<CardDeck>();
+    static List<Player> players = new ArrayList<>();
+    static Stack<Card> totalCards = new Stack<>();
+    static List<CardDeck> decks = new ArrayList<>();
+    static boolean gameActive = true;
 
     public static void main(String[] args) {
         initializeGame();
@@ -33,6 +34,7 @@ public class CardGame {
         for (int i = 0; i < auxNumberPlayers; i++) {
             Player player = new Player(i + 1);
             CardDeck deck = new CardDeck(i + 1);
+            player.start();
             players.add(player);
             decks.add(deck);
         }
@@ -41,20 +43,6 @@ public class CardGame {
     }
 
     private static void generateCards(int numberPlayers) {
-
-        /*
-        //generate cards
-        for (int i = 0; i < numberPlayers; i++) {
-            for (int j = 0; j < 8; j++) {
-                Card card = new Card(j);
-                totalCards.push(card);
-            }
-        }
-
-        //randomize
-        Collections.shuffle(totalCards);
-        */
-
         int numCards;
         boolean containsNonInt = false;
         boolean incorrectNumCards;
@@ -71,16 +59,16 @@ public class CardGame {
             //validate
             //check for 8n cards (lines in file)
             numCards = inputPack.size();
-            incorrectNumCards = !(numCards == 8*numPlayers);
+            incorrectNumCards = !(numCards == 8 * numPlayers);
 
-            if (incorrectNumCards){
+            if (incorrectNumCards) {
                 System.out.println("You entered an invalid inputPack!");
                 continue;
             }
 
             containsNonInt = false;
             //check each line is a positive int
-            for (String line:inputPack) {
+            for (String line : inputPack) {
 
                 try {
                     auxInputPack.add(Integer.parseInt(line));
@@ -90,9 +78,9 @@ public class CardGame {
                     break;
                 }
             }
-        } while(incorrectNumCards || containsNonInt);
+        } while (incorrectNumCards || containsNonInt);
 
-        for (int c:auxInputPack){
+        for (int c : auxInputPack) {
             Card card = new Card(c);
             totalCards.push(card);
         }
@@ -112,7 +100,54 @@ public class CardGame {
                 decks.get(j).addCard(nextCard);
             }
         }
+
+        boolean isGameOver = analiseWinners();
+        if (!isGameOver) {
+            startGame();
+        }
     }
+
+    private static boolean analiseWinners() {
+        List<Player> winners;
+        winners = getWinners();
+        if (winners.isEmpty()) {
+            System.out.println("No winner yet");
+            return false;
+        } else {
+            for (Player player : winners) {
+                System.out.println(player.name + " is a winner!");
+            }
+            return true;
+        }
+    }
+
+    public static List<Player> getWinners() {
+        List<Player> winners = new ArrayList<>();
+        for (Player player : players) {
+            boolean flag = true;
+            int firstCard = player.cards.get(0).getCardValue();
+            for (Card card : player.cards) {
+                if (card.getCardValue() != firstCard) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                winners.add(player);
+            }
+        }
+        return winners;
+    }
+
+    private static void startGame() {
+        while (gameActive) {
+            for (Player player : players) {
+                new Thread(() -> Player.exchangeCards(decks)).start();
+            }
+        }
+    }
+
+
 
     private static ArrayList<String> readFile(String pathName) {
 
@@ -122,7 +157,7 @@ public class CardGame {
         ArrayList<String> output = new ArrayList<>();
         try {
             br = new BufferedReader(new FileReader(file));
-            
+
             String st;
 
             while ((st = br.readLine()) != null)
