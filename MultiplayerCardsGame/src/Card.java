@@ -1,6 +1,6 @@
 public class Card {
 
-    int cardValue;
+    private final int cardValue;
 
     public Card(int cardValue) {
         this.cardValue = cardValue;

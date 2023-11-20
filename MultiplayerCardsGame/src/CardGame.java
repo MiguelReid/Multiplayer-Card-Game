@@ -85,7 +85,7 @@ public class CardGame {
             totalCards.push(card);
         }
 
-        //assign cards
+        //assign cards to players
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < numberPlayers; j++) {
                 Card nextCard = totalCards.pop();
@@ -93,7 +93,17 @@ public class CardGame {
             }
         }
 
-        //assign cards
+        //output players initial hands
+        for (Player player : players) {
+            int playerName = player.GetName();
+            List<Card> cards = player.getCards();
+            List<String> auxCards = player.getAuxCards();
+            
+            String initialHandOutput = String.format("player %d initial hand", playerName) + String.join(" ", auxCards);
+        }
+
+
+        //assign remaining cards to decks
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < numberPlayers; j++) {
                 Card nextCard = totalCards.pop();
@@ -101,13 +111,13 @@ public class CardGame {
             }
         }
 
-        boolean isGameOver = analiseWinners();
-        if (!isGameOver) {
-            startGame();
+        gameActive = !checkGameWon();
+        if (gameActive) {
+            gameLoop();
         }
     }
 
-    private static boolean analiseWinners() {
+    private static boolean checkGameWon() {
         List<Player> winners;
         winners = getWinners();
         if (winners.isEmpty()) {
@@ -115,7 +125,7 @@ public class CardGame {
             return false;
         } else {
             for (Player player : winners) {
-                System.out.println(player.name + " is a winner!");
+                System.out.println(player.GetName() + " is a winner!");
             }
             return true;
         }
@@ -125,8 +135,8 @@ public class CardGame {
         List<Player> winners = new ArrayList<>();
         for (Player player : players) {
             boolean flag = true;
-            int firstCard = player.cards.get(0).getCardValue();
-            for (Card card : player.cards) {
+            int firstCard = player.getCards().get(0).getCardValue();
+            for (Card card : player.getCards()) {
                 if (card.getCardValue() != firstCard) {
                     flag = false;
                     break;
@@ -139,11 +149,12 @@ public class CardGame {
         return winners;
     }
 
-    private static void startGame() {
+    private static void gameLoop() {
         while (gameActive) {
             for (Player player : players) {
                 new Thread(() -> Player.exchangeCards(decks)).start();
             }
+            gameActive = !checkGameWon();
         }
     }
 
