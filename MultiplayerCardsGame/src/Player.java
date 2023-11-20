@@ -59,6 +59,8 @@ public class Player extends Thread {
             }
         }
 
+        // check win condition
+
         String drawOutput = String.format("player %d draws a %d from deck %d", name, drawCard.getCardValue(), leftDeckName);
         String discardOutput = String.format("player %d draws a %d from deck %d", name, discardCard.getCardValue(), rightDeckName);
         String handOutput = String.format("player %d current hand is", name) + String.join(" ", auxCards);
