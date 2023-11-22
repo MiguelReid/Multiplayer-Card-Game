@@ -21,6 +21,5 @@ public class CardDeck {
 
     public void removeCard(Card card) {
         cards.remove(card);
-        System.out.println("removed card from deck " + name);
     }
 }

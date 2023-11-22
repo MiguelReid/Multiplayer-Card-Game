@@ -39,7 +39,7 @@ public class Player implements Runnable {
         Player.decks = decks;
     }
 
-    private boolean checkWin(){
+    private boolean checkWin() {
         boolean flag = true;
         int firstCard = cards.get(0).getCardValue();
         for (Card card : cards) {
@@ -51,10 +51,10 @@ public class Player implements Runnable {
         return flag;
     }
 
-    public void writeOutput(){
-        CardGame.writeToFile(output,outputFile);
-        CardGame.writeToFile(output,outputFile);
-        CardGame.writeToFile(output,outputFile);
+    public void writeOutput() {
+        CardGame.writeToFile(output, outputFile);
+        CardGame.writeToFile(output, outputFile);
+        CardGame.writeToFile(output, outputFile);
     }
 
     @Override
@@ -62,11 +62,11 @@ public class Player implements Runnable {
         if (decks == null) {
             throw new IllegalStateException("Decks list not set for players.");
         }
-        int leftDeckName = name-1;
+        int leftDeckName = name - 1;
         int rightDeckName = name;
 
         if (rightDeckName >= decks.size()) {
-            rightDeckName = 1;
+            rightDeckName = 0;
         }
         CardDeck leftDeck = decks.get(leftDeckName);
         CardDeck rightDeck = decks.get(rightDeckName);
@@ -83,7 +83,7 @@ public class Player implements Runnable {
         for (Card card : cards) {
             if (card.getCardValue() != name) {
                 discardCard = card;
-                this.removeCard(discardCard);
+                this.removeCard(card);
                 rightDeck.addCard(card);
                 cards.remove(card);
                 break;
@@ -93,16 +93,19 @@ public class Player implements Runnable {
         outputFile = "player" + name + "_output.txt";
 
         String drawOutput = String.format("player %d draws a %d from deck %d\n", name, drawCard.getCardValue(), name);
-        String discardOutput = String.format("player %d discard a %d to deck %d\n", name, discardCard.getCardValue(), name+1);
-        String handOutput = String.format("player %d current hand is ", name) + String.join(" ", auxCards) +"\n";
+        String discardOutput = String.format("player %d discard a %d to deck %d\n", name, discardCard.getCardValue(), name + 1);
+        String handOutput = String.format("player %d current hand is ", name) + String.join(" ", auxCards) + "\n";
 
         output.append(drawOutput);
         output.append(discardOutput);
         output.append(handOutput);
 
         // check win condition
-        if (checkWin()){
+        if (checkWin()) {
+            System.out.println("THERES A WINNER" + name);
             CardGame.setWinner(name);
+            //System.exit(0);
         }
+
     }
 }

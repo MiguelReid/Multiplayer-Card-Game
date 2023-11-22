@@ -165,7 +165,6 @@ public class CardGame {
                 Thread playerThread = new Thread(player);
                 playerThreads.add(playerThread);
                 playerThread.start();
-                System.out.println("PLayer thread " + player.GetName());
             }
 
             // Wait for all player threads to finish
@@ -183,9 +182,11 @@ public class CardGame {
                 }
                 System.out.println("Game won by player " + winner + "!");
                 gameActive = false;
-            }
 
-            System.out.println("All players have drawn cards. Continue with the game.");
+                for (Thread thread : playerThreads) {
+                    thread.interrupt();
+                }
+            }
         }
     }
 
@@ -217,6 +218,7 @@ public class CardGame {
             FileWriter myWriter = new FileWriter(filePath);
             myWriter.write(String.valueOf(text));
             myWriter.close();
+            System.out.println(filePath);
         } catch (IOException e) {
             System.out.println("An error occurred writing to that file.");
             e.printStackTrace();
