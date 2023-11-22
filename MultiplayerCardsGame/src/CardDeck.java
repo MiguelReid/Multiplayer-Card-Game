@@ -12,17 +12,15 @@ public class CardDeck {
     }
 
     public List<Card> getCards() {
-        System.out.println(cards);
         return cards;
     }
 
     public void addCard(Card newCard){
         cards.add(newCard);
-        System.out.println("Deck " + name + " - now size " + cards.size());
     }
 
     public void removeCard(Card card) {
         cards.remove(card);
-        System.out.println("Deck " + name + " - now size " + cards.size());
+        System.out.println("removed card from deck " + name);
     }
 }

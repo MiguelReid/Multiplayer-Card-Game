@@ -1,0 +1,12 @@
+player 1 draws a 2 from deck 1
+player 1 discard a 4 to deck 2
+player 1 current hand is 1 4 4 2
+player 1 draws a 2 from deck 1
+player 1 discard a 4 to deck 2
+player 1 current hand is 1 4 2 2
+player 1 draws a 2 from deck 1
+player 1 discard a 4 to deck 2
+player 1 current hand is 1 2 2 2
+player 1 draws a 3 from deck 1
+player 1 discard a 2 to deck 2
+player 1 current hand is 1 2 2 3

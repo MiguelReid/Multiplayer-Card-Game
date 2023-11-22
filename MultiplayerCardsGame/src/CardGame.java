@@ -8,8 +8,14 @@ public class CardGame {
     static List<CardDeck> decks = new ArrayList<>();
     static boolean gameActive = true;
 
+    private static int winner = 0;
+
     public static void main(String[] args) {
         initializeGame();
+    }
+
+    public static void setWinner(int newWinner) {
+        winner = newWinner;
     }
 
     private static void initializeGame() {
@@ -127,7 +133,6 @@ public class CardGame {
         } else {
             for (Player player : winners) {
                 System.out.println(player.GetName() + " is a winner!");
-                System.out.println(player.getAuxCards());
             }
             return true;
         }
@@ -152,7 +157,7 @@ public class CardGame {
     }
 
     private static void gameLoop() {
-        while (gameActive){
+        while (gameActive) {
             List<Thread> playerThreads = new ArrayList<>();
 
             // Create and start a thread for each player
@@ -160,6 +165,7 @@ public class CardGame {
                 Thread playerThread = new Thread(player);
                 playerThreads.add(playerThread);
                 playerThread.start();
+                System.out.println("PLayer thread " + player.GetName());
             }
 
             // Wait for all player threads to finish
@@ -171,11 +177,15 @@ public class CardGame {
                 }
             }
 
-            gameActive = !checkGameWon();
-
+            if (winner > 0) {
+                for (Player player : players) {
+                    player.writeOutput();
+                }
+                System.out.println("Game won by player " + winner + "!");
+                gameActive = false;
+            }
 
             System.out.println("All players have drawn cards. Continue with the game.");
-            //TODO not sure if this just end, could iterate and do while no winner call gameLoop again
         }
     }
 
@@ -200,5 +210,16 @@ public class CardGame {
 
 
         return output;
+    }
+
+    public static void writeToFile(StringBuilder text, String filePath) {
+        try {
+            FileWriter myWriter = new FileWriter(filePath);
+            myWriter.write(String.valueOf(text));
+            myWriter.close();
+        } catch (IOException e) {
+            System.out.println("An error occurred writing to that file.");
+            e.printStackTrace();
+        }
     }
 }
