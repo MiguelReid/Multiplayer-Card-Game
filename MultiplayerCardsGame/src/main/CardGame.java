@@ -1,3 +1,5 @@
+package main;
+
 import java.io.*;
 import java.util.*;
 
@@ -44,7 +46,7 @@ public class CardGame {
         }
 
         Player.setDecks(decks);
-        // So we don't have deck in the Player constructor
+        // So we don't have deck in the main.Player constructor
 
         generateCards(auxNumberPlayers);
     }
@@ -108,7 +110,6 @@ public class CardGame {
 
             String initialHandOutput = String.format("player %d initial hand", playerName) + String.join(" ", auxCards);
         }
-
 
         //assign remaining cards to decks
         for (int i = 0; i < 4; i++) {

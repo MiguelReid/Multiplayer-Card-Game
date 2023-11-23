@@ -1,7 +1,10 @@
+package main;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Player implements Runnable {
+
     private final int name;
     private String outputFile;
     private StringBuilder output = new StringBuilder();
