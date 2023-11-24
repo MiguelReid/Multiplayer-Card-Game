@@ -1,5 +1,7 @@
 package main;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,9 +57,21 @@ public class Player implements Runnable {
     }
 
     public void writeOutput() {
-        CardGame.writeToFile(output, outputFile);
-        CardGame.writeToFile(output, outputFile);
-        CardGame.writeToFile(output, outputFile);
+        writeToFile(output, outputFile);
+        writeToFile(output, outputFile);
+        writeToFile(output, outputFile);
+    }
+
+    public static void writeToFile(StringBuilder text, String filePath) {
+        try {
+            FileWriter myWriter = new FileWriter(filePath);
+            myWriter.write(String.valueOf(text));
+            myWriter.close();
+            System.out.println(filePath);
+        } catch (IOException e) {
+            System.out.println("An error occurred writing to that file.");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -105,9 +119,7 @@ public class Player implements Runnable {
 
         // check win condition
         if (checkWin()) {
-            System.out.println("THERES A WINNER" + name);
             CardGame.setWinner(name);
-            //System.exit(0);
         }
 
     }

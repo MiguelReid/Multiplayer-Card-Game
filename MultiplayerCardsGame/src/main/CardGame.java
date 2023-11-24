@@ -5,12 +5,8 @@ import java.util.*;
 
 public class CardGame {
 
-    static List<Player> players = new ArrayList<>();
-    static Stack<Card> totalCards = new Stack<>();
-    static List<CardDeck> decks = new ArrayList<>();
-    static boolean gameActive = true;
-
-    private static int winner = 0;
+    static int winner;
+    String test;
 
     public static void main(String[] args) {
         initializeGame();
@@ -20,7 +16,16 @@ public class CardGame {
         winner = newWinner;
     }
 
-    private static void initializeGame() {
+    public static int getWinner(){
+        return winner;
+    }
+
+    public static void initializeGame() {
+
+        List<Player> players = new ArrayList<>();
+        Stack<Card> totalCards = new Stack<>();
+        List<CardDeck> decks = new ArrayList<>();
+
         String numberPlayers;
         boolean flag;
         int auxNumberPlayers = 0;
@@ -48,10 +53,10 @@ public class CardGame {
         Player.setDecks(decks);
         // So we don't have deck in the main.Player constructor
 
-        generateCards(auxNumberPlayers);
+        generateCards(auxNumberPlayers, players, totalCards, decks);
     }
 
-    private static void generateCards(int numberPlayers) {
+    public static void generateCards(int numberPlayers, List<Player> players, Stack<Card> totalCards, List<CardDeck> decks) {
         int numCards;
         boolean containsNonInt = false;
         boolean incorrectNumCards;
@@ -119,15 +124,28 @@ public class CardGame {
             }
         }
 
-        gameActive = !checkGameWon();
-        if (gameActive) {
-            gameLoop();
+        if (!checkGameWon(players)) {
+            gameLoop(players);
         }
     }
 
-    private static boolean checkGameWon() {
-        List<Player> winners;
-        winners = getWinners();
+    public static boolean checkGameWon(List<Player> players) {
+        List<Player> winners = new ArrayList<>();
+        for (Player player : players) {
+            boolean flag = true;
+            //int firstCard = player.getCards().get(0).getCardValue();
+            for (Card card : player.getCards()) {
+                if (card.getCardValue() != player.GetName()) {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                winners.add(player);
+                setWinner(player.GetName());
+            }
+        }
+
         if (winners.isEmpty()) {
             System.out.println("No winner yet");
             return false;
@@ -139,28 +157,10 @@ public class CardGame {
         }
     }
 
-    public static List<Player> getWinners() {
-        List<Player> winners = new ArrayList<>();
-        for (Player player : players) {
-            boolean flag = true;
-            int firstCard = player.getCards().get(0).getCardValue();
-            for (Card card : player.getCards()) {
-                if (card.getCardValue() != firstCard) {
-                    flag = false;
-                    break;
-                }
-            }
-            if (flag) {
-                winners.add(player);
-            }
-        }
-        return winners;
-    }
-
-    private static void gameLoop() {
+    public static void gameLoop(List<Player> players) {
+        boolean gameActive = true;
         while (gameActive) {
             List<Thread> playerThreads = new ArrayList<>();
-
             // Create and start a thread for each player
             for (Player player : players) {
                 Thread playerThread = new Thread(player);
@@ -191,16 +191,13 @@ public class CardGame {
         }
     }
 
-
-    private static ArrayList<String> readFile(String pathName) {
+    public static ArrayList<String> readFile(String pathName) {
 
         File file = new File(pathName);
-
         BufferedReader br = null;
         ArrayList<String> output = new ArrayList<>();
         try {
             br = new BufferedReader(new FileReader(file));
-
             String st;
 
             while ((st = br.readLine()) != null)
@@ -210,19 +207,6 @@ public class CardGame {
             throw new RuntimeException(e);
         }
 
-
         return output;
-    }
-
-    public static void writeToFile(StringBuilder text, String filePath) {
-        try {
-            FileWriter myWriter = new FileWriter(filePath);
-            myWriter.write(String.valueOf(text));
-            myWriter.close();
-            System.out.println(filePath);
-        } catch (IOException e) {
-            System.out.println("An error occurred writing to that file.");
-            e.printStackTrace();
-        }
     }
 }
