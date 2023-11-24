@@ -37,13 +37,22 @@ class CardGameTest {
         List<CardDeck> decks = List.of(new CardDeck(1), new CardDeck(2));
 
         // Call the method to test
-        CardGame.generateCards(2, players, totalCards, decks);
+        CardGame.generateCards(2, "two.txt", players, totalCards, decks);
 
         // Add your assertions here based on the expected behavior
         // For example, you can check if players have received the expected number of cards
+
         for (Player player : players) {
             assertEquals(4, player.getCards().size());
         }
+
+        for (CardDeck deck : decks) {
+            assertEquals(4, deck.getCards().size());
+        }
+
+        //
+
+
     }
 
     @Test
@@ -57,5 +66,11 @@ class CardGameTest {
 
     @Test
     void readFile() {
+
+        // if incorrect filepath is given, error is returned
+
+        // readfile gets first line
+
+        // readfile gets last line
     }
 }

@@ -32,7 +32,7 @@ public class CardGame {
         do {
             flag = false;
             Scanner scanner = new Scanner(System.in);  // Create a Scanner object
-            System.out.println("How many players are there?: ");
+            System.out.println("Please enter the number of players: ");
             numberPlayers = scanner.nextLine();  // Read user input
 
             try {
@@ -41,7 +41,12 @@ public class CardGame {
                 System.out.println(numberPlayers + " not an integer!");
                 flag = true;
             }
-        } while (flag || auxNumberPlayers < 0);
+        } while (flag || auxNumberPlayers <= 0);
+
+        Scanner scanner = new Scanner(System.in);  // Create a Scanner object
+        System.out.println("Please enter the location of the pack to load: ");
+        String filePath = scanner.nextLine();  // Read user input
+
 
         for (int i = 0; i < auxNumberPlayers; i++) {
             Player player = new Player(i + 1);
@@ -53,10 +58,10 @@ public class CardGame {
         Player.setDecks(decks);
         // So we don't have deck in the main.Player constructor
 
-        generateCards(auxNumberPlayers, players, totalCards, decks);
+        generateCards(auxNumberPlayers, filePath, players, totalCards, decks);
     }
 
-    public static void generateCards(int numberPlayers, List<Player> players, Stack<Card> totalCards, List<CardDeck> decks) {
+    public static void generateCards(int numberPlayers, String packFilePath, List<Player> players, Stack<Card> totalCards, List<CardDeck> decks) {
         int numCards;
         boolean containsNonInt = false;
         boolean incorrectNumCards;
@@ -68,7 +73,7 @@ public class CardGame {
             auxInputPack.clear();
 
             //read input pack
-            ArrayList<String> inputPack = readFile("MultiplayerCardsGame/four.txt");
+            ArrayList<String> inputPack = readFile("MultiplayerCardsGame/" + packFilePath);
 
             //validate
             //check for 8n cards (lines in file)
@@ -77,7 +82,8 @@ public class CardGame {
 
             if (incorrectNumCards) {
                 System.out.println("You entered an invalid inputPack!");
-                continue;
+                initializeGame();
+                return;
             }
 
             containsNonInt = false;
@@ -110,10 +116,10 @@ public class CardGame {
         //output players initial hands
         for (Player player : players) {
             int playerName = player.GetName();
-            List<Card> cards = player.getCards();
             List<String> auxCards = player.getAuxCards();
 
-            String initialHandOutput = String.format("player %d initial hand", playerName) + String.join(" ", auxCards);
+            StringBuilder initialHandOutput = new StringBuilder("player " + playerName + " initial hand " + String.join(" ", auxCards) + "\n");
+            Player.writeToFile(initialHandOutput, "player" + playerName + "_output.txt", false);
         }
 
         //assign remaining cards to decks
@@ -133,9 +139,9 @@ public class CardGame {
         List<Player> winners = new ArrayList<>();
         for (Player player : players) {
             boolean flag = true;
-            //int firstCard = player.getCards().get(0).getCardValue();
+            int firstCard = player.getCards().get(0).getCardValue();
             for (Card card : player.getCards()) {
-                if (card.getCardValue() != player.GetName()) {
+                if (card.getCardValue() != firstCard) {
                     flag = false;
                     break;
                 }
@@ -179,7 +185,7 @@ public class CardGame {
 
             if (winner > 0) {
                 for (Player player : players) {
-                    player.writeOutput();
+                    player.writeFinalOutput(winner);
                 }
                 System.out.println("Game won by player " + winner + "!");
                 gameActive = false;
@@ -191,10 +197,11 @@ public class CardGame {
         }
     }
 
+    // Returns empty if can't find file
     public static ArrayList<String> readFile(String pathName) {
 
         File file = new File(pathName);
-        BufferedReader br = null;
+        BufferedReader br;
         ArrayList<String> output = new ArrayList<>();
         try {
             br = new BufferedReader(new FileReader(file));
@@ -204,7 +211,7 @@ public class CardGame {
                 output.add(st);
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            return output;
         }
 
         return output;

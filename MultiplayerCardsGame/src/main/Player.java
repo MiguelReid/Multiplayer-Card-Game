@@ -56,15 +56,23 @@ public class Player implements Runnable {
         return flag;
     }
 
-    public void writeOutput() {
-        writeToFile(output, outputFile);
-        writeToFile(output, outputFile);
-        writeToFile(output, outputFile);
+    public void writeFinalOutput(int winner) {
+        if (winner == name){
+            output.append("player " + name + " wins\n");
+            output.append("player " + name + " exits\n");
+            output.append("player " + name + " final hand: " + String.join(" ", auxCards) + "\n");
+        } else {
+            output.append("player " + winner + " has informed player " + name + " that player " + winner + " has won\n");
+            output.append("player " + name + " exits\n");
+            output.append("player " + name + " hand: " + String.join(" ", auxCards) + "\n");
+        }
+
+        writeToFile(output, outputFile, true);
     }
 
-    public static void writeToFile(StringBuilder text, String filePath) {
+    public static void writeToFile(StringBuilder text, String filePath, boolean dontOverwrite) {
         try {
-            FileWriter myWriter = new FileWriter(filePath);
+            FileWriter myWriter = new FileWriter(filePath, dontOverwrite);
             myWriter.write(String.valueOf(text));
             myWriter.close();
             System.out.println(filePath);
