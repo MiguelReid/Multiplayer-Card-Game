@@ -63,7 +63,7 @@ public class CardGame {
 
     public static void generateCards(int numberPlayers, String packFilePath, List<Player> players, Stack<Card> totalCards, List<CardDeck> decks) {
         int numCards;
-        boolean containsNonInt = false;
+        boolean containsNonInt;
         boolean incorrectNumCards;
         int numPlayers = players.size();
         ArrayList<Integer> auxInputPack = new ArrayList<>();
