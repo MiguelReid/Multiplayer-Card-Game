@@ -184,8 +184,16 @@ public class CardGame {
             }
 
             if (winner > 0) {
+                // Tell each player to write to output file
                 for (Player player : players) {
                     player.writeFinalOutput(winner);
+                }
+                // Write to an output file for each deck
+                for (CardDeck deck: Player.getDecks()) {
+                    List<String> auxCards = deck.getAuxCards();
+                    StringBuilder deckOutput = new StringBuilder("deck" + deck.name + " contents: " + String.join(" ", auxCards));
+                    String filePath = "deck" + deck.name + "_output.txt";
+                    Player.writeToFile(deckOutput, filePath, false);
                 }
                 System.out.println("Game won by player " + winner + "!");
                 gameActive = false;

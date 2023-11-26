@@ -22,6 +22,10 @@ public class Player implements Runnable {
         return name;
     }
 
+    public static List<CardDeck> getDecks() {
+        return decks;
+    }
+
     public List<Card> getCards() {
         return cards;
     }
