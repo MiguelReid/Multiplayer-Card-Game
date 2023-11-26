@@ -25,10 +25,9 @@ class CardGameTest {
     void generateCards() {
         // Create a mock player and decks
         List<Player> players = List.of(new Player(1), new Player(2));
-        Stack<Card> totalCards = new Stack<>();
         List<CardDeck> decks = List.of(new CardDeck(1), new CardDeck(2));
 
-        CardGame.generateCards(2, "two.txt", players, totalCards, decks);
+        CardGame.generateCards(2, "two.txt", players, decks);
 
         for (Player player : players) {
             assertEquals(4, player.getCards().size());

@@ -5,7 +5,7 @@ import java.util.List;
 
 public class CardDeck {
 
-    public int name;
+    private final int name;
 
     private List<Card> cards = new ArrayList<>();
 
@@ -13,6 +13,10 @@ public class CardDeck {
 
     public CardDeck(int name){
         this.name = name;
+    }
+
+    public int getName() {
+        return name;
     }
 
     public List<Card> getCards() {

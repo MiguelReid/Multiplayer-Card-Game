@@ -5,7 +5,7 @@ import java.util.*;
 
 public class CardGame {
 
-    static int winner;
+    private static int winner;
     String test;
 
     public static void main(String[] args) {
@@ -23,32 +23,39 @@ public class CardGame {
     public static void initializeGame() {
 
         List<Player> players = new ArrayList<>();
-        Stack<Card> totalCards = new Stack<>();
         List<CardDeck> decks = new ArrayList<>();
 
-        String numberPlayers;
-        boolean flag;
-        int auxNumberPlayers = 0;
+        boolean invalidInput;
+        int numPlayers = 0;
+
         do {
-            flag = false;
+            invalidInput = false;
             Scanner scanner = new Scanner(System.in);  // Create a Scanner object
             System.out.println("Please enter the number of players: ");
-            numberPlayers = scanner.nextLine();  // Read user input
+            String numPlayersInput = scanner.nextLine();  // Read user input
 
+            // Checking if int, and > 0
             try {
-                auxNumberPlayers = Integer.parseInt(numberPlayers);
+                numPlayers = Integer.parseInt(numPlayersInput);
+
+                if (numPlayers <= 0){
+                    System.out.println("Number of players must be > 0");
+                    invalidInput = true;
+                }
+
             } catch (NumberFormatException e) {
-                System.out.println(numberPlayers + " not an integer!");
-                flag = true;
+                System.out.println(numPlayersInput + " is not an integer!");
+                invalidInput = true;
             }
-        } while (flag || auxNumberPlayers <= 0);
+
+        } while (invalidInput);
 
         Scanner scanner = new Scanner(System.in);  // Create a Scanner object
-        System.out.println("Please enter the location of the pack to load: ");
-        String filePath = scanner.nextLine();  // Read user input
+        System.out.println("Please enter the name of the pack to load: ");
+        String packFilePath = scanner.nextLine();  // Read user input
 
-
-        for (int i = 0; i < auxNumberPlayers; i++) {
+        // Creating objects based on input given
+        for (int i = 0; i < numPlayers; i++) {
             Player player = new Player(i + 1);
             CardDeck deck = new CardDeck(i + 1);
             players.add(player);
@@ -58,54 +65,49 @@ public class CardGame {
         Player.setDecks(decks);
         // So we don't have deck in the main.Player constructor
 
-        generateCards(auxNumberPlayers, filePath, players, totalCards, decks);
+        generateCards(numPlayers, packFilePath, players, decks);
     }
 
-    public static void generateCards(int numberPlayers, String packFilePath, List<Player> players, Stack<Card> totalCards, List<CardDeck> decks) {
-        int numCards;
-        boolean containsNonInt;
-        boolean incorrectNumCards;
+    public static void generateCards(int numberPlayers, String packFilePath, List<Player> players, List<CardDeck> decks) {
+        ArrayList<String> inputPack = readFile("inputPacks/" + packFilePath); // Reading inputPack
+
+        if (inputPack.isEmpty()) {
+            System.out.println("The input pack you entered does not exist.");
+            initializeGame();
+            return;
+        }
+
+        int numCards = inputPack.size();
         int numPlayers = players.size();
-        ArrayList<Integer> auxInputPack = new ArrayList<>();
+        // Checking for 8n lines in inputPack
+        boolean incorrectNumCards = !(numCards == 8 * numPlayers);
+        if (incorrectNumCards) {
+            System.out.println("You entered an invalid inputPack - doesn't contain 8n cards!");
+            initializeGame();
+            return;
+        }
 
-        do {
-            //reset auxInputPack
-            auxInputPack.clear();
+        Stack<Card> totalCards = new Stack<>();
+        // Checking each line is a positive int and storing in a stack
+        for (String line : inputPack) {
+            try {
+                Card card = new Card(Integer.parseInt(line));
+                totalCards.push(card);
 
-            //read input pack
-            ArrayList<String> inputPack = readFile("MultiplayerCardsGame/" + packFilePath);
+                if (Integer.parseInt(line) <= 0){
+                    System.out.println("You entered an invalid inputPack - contains a card with value <= 0!");
+                    initializeGame();
+                    return;
+                }
 
-            //validate
-            //check for 8n cards (lines in file)
-            numCards = inputPack.size();
-            incorrectNumCards = !(numCards == 8 * numPlayers);
-
-            if (incorrectNumCards) {
-                System.out.println("You entered an invalid inputPack!");
+            } catch (NumberFormatException e) {
+                System.out.println("You entered an invalid inputPack - contains a non-integer card!");
                 initializeGame();
                 return;
             }
-
-            containsNonInt = false;
-            //check each line is a positive int
-            for (String line : inputPack) {
-
-                try {
-                    auxInputPack.add(Integer.parseInt(line));
-                } catch (NumberFormatException e) {
-                    System.out.println("You entered an invalid inputPack!");
-                    containsNonInt = true;
-                    break;
-                }
-            }
-        } while (incorrectNumCards || containsNonInt);
-
-        for (int c : auxInputPack) {
-            Card card = new Card(c);
-            totalCards.push(card);
         }
 
-        //assign cards to players
+        // Distribute cards to players in round-robin fashion
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < numberPlayers; j++) {
                 Card nextCard = totalCards.pop();
@@ -113,16 +115,16 @@ public class CardGame {
             }
         }
 
-        //output players initial hands
+        // Output initial player hands
         for (Player player : players) {
             int playerName = player.GetName();
             List<String> auxCards = player.getAuxCards();
 
             StringBuilder initialHandOutput = new StringBuilder("player " + playerName + " initial hand " + String.join(" ", auxCards) + "\n");
-            Player.writeToFile(initialHandOutput, "player" + playerName + "_output.txt", false);
+            writeToFile(initialHandOutput, "player" + playerName + "_output.txt", false);
         }
 
-        //assign remaining cards to decks
+        // Distribute remaining cards to decks in round-robin fashion
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < numberPlayers; j++) {
                 Card nextCard = totalCards.pop();
@@ -130,43 +132,49 @@ public class CardGame {
             }
         }
 
-        if (!checkGameWon(players)) {
-            gameLoop(players);
+        if (checkGameWon(players)) { // Initial check of win-condition
+            return;
         }
+        gameLoop(players);
     }
 
+    // Used for initial checking of win-condition
+    // Supports multiple winners
     public static boolean checkGameWon(List<Player> players) {
         List<Player> winners = new ArrayList<>();
+
+        // Checking and storing any winners
         for (Player player : players) {
-            boolean flag = true;
+            boolean hasWon = true;
             int firstCard = player.getCards().get(0).getCardValue();
+
             for (Card card : player.getCards()) {
                 if (card.getCardValue() != firstCard) {
-                    flag = false;
+                    hasWon = false;
                     break;
                 }
             }
-            if (flag) {
+
+            if (hasWon) {
                 winners.add(player);
-                setWinner(player.GetName());
             }
         }
 
-        if (winners.isEmpty()) {
-            System.out.println("No winner yet");
-            return false;
-        } else {
-            for (Player player : winners) {
-                System.out.println(player.GetName() + " is a winner!");
-            }
-            return true;
+        for (Player player : winners) {
+            System.out.println(player.GetName() + " is a winner!");
         }
+
+        if (winners.isEmpty()) { return false; }
+
+        else { return true; }
     }
 
     public static void gameLoop(List<Player> players) {
         boolean gameActive = true;
+
         while (gameActive) {
             List<Thread> playerThreads = new ArrayList<>();
+
             // Create and start a thread for each player
             for (Player player : players) {
                 Thread playerThread = new Thread(player);
@@ -188,12 +196,15 @@ public class CardGame {
                 for (Player player : players) {
                     player.writeFinalOutput(winner);
                 }
+
                 // Write to an output file for each deck
                 for (CardDeck deck: Player.getDecks()) {
                     List<String> auxCards = deck.getAuxCards();
-                    StringBuilder deckOutput = new StringBuilder("deck" + deck.name + " contents: " + String.join(" ", auxCards));
-                    String filePath = "deck" + deck.name + "_output.txt";
-                    Player.writeToFile(deckOutput, filePath, false);
+                    int deckName = deck.getName();
+
+                    StringBuilder deckOutput = new StringBuilder("deck" + deckName + " contents: " + String.join(" ", auxCards));
+                    String filePath = "deck" + deckName + "_output.txt";
+                    writeToFile(deckOutput, filePath, false);
                 }
                 System.out.println("Game won by player " + winner + "!");
                 gameActive = false;
@@ -205,23 +216,36 @@ public class CardGame {
         }
     }
 
-    // Returns empty if can't find file
     public static ArrayList<String> readFile(String pathName) {
-
         File file = new File(pathName);
-        BufferedReader br;
+        BufferedReader reader;
         ArrayList<String> output = new ArrayList<>();
-        try {
-            br = new BufferedReader(new FileReader(file));
-            String st;
 
-            while ((st = br.readLine()) != null)
-                output.add(st);
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = reader.readLine()) != null)
+                output.add(line);
 
         } catch (IOException e) {
-            return output;
+            // Returns empty if can't find file
+            return new ArrayList<>();
         }
-
         return output;
+    }
+
+    public static void writeToFile(StringBuilder text, String filePath, boolean dontOverwrite) {
+        filePath = "outputFiles/" + filePath;
+
+        try {
+            FileWriter writer = new FileWriter(filePath, dontOverwrite);
+            writer.write(String.valueOf(text));
+            writer.close();
+
+        } catch (IOException e) {
+            System.out.println("Error occurred writing to file: " + filePath);
+            e.printStackTrace();
+        }
     }
 }

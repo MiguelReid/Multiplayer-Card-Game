@@ -1,7 +1,0 @@
-player 5 initial hand 5 5 5 1
-player 5 draws a 5 from deck 5
-player 5 discard a 1 to deck 6
-player 5 current hand is 5 5 5 5
-player 5 wins
-player 5 exits
-player 5 final hand: 5 5 5 5
