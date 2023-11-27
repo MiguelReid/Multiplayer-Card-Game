@@ -1,7 +1,5 @@
 package main;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,7 +59,7 @@ public class Player implements Runnable {
     }
 
     public void writeFinalOutput(int winner) {
-        if (winner == name){
+        if (winner == name) {
             output.append("player " + name + " wins\n");
             output.append("player " + name + " exits\n");
             output.append("player " + name + " final hand: " + String.join(" ", auxCards) + "\n");
@@ -112,7 +110,6 @@ public class Player implements Runnable {
         }
 
         // Creating and storing output lines
-
         String drawOutput = String.format("player %d draws a %d from deck %d\n", name, drawCard.getCardValue(), name);
         String discardOutput = String.format("player %d discard a %d to deck %d\n", name, discardCard.getCardValue(), name + 1);
         String handOutput = String.format("player %d current hand is ", name) + String.join(" ", auxCards) + "\n";

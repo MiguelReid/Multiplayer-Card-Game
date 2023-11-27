@@ -164,9 +164,7 @@ public class CardGame {
             System.out.println(player.GetName() + " is a winner!");
         }
 
-        if (winners.isEmpty()) { return false; }
-
-        else { return true; }
+        return !winners.isEmpty();
     }
 
     public static void gameLoop(List<Player> players) {

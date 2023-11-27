@@ -6,20 +6,17 @@ import main.CardGame;
 import main.Player;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class CardGameTest {
-
-    /*
-    @Test
-    void initializeGame() {
-
-    }
-     */
 
     @Test
     void generateCards() {
@@ -76,75 +73,21 @@ class CardGameTest {
         assertEquals(2, CardGame.getWinner());
     }
 
-    /*
     @Test
-    void gameLoop() {
-        var player1 = new Player(1);
-        player1.addCard(new Card(1));
-        player1.addCard(new Card(2));
-        player1.addCard(new Card(3));
-        player1.addCard(new Card(4));
+    void writeToFile() throws IOException {
 
-        var player2 = new Player(2);
-        player2.addCard(new Card(1));
-        player2.addCard(new Card(2));
-        player2.addCard(new Card(2));
-        player2.addCard(new Card(2));
+        var content = new StringBuilder("This is a test file");
+        String pathAux = "outputFiles/testingFile.txt";
+        Path path = Paths.get(pathAux);
 
-        var player3 = new Player(3);
-        player3.addCard(new Card(1));
-        player3.addCard(new Card(2));
-        player3.addCard(new Card(3));
-        player3.addCard(new Card(4));
+        // We check if the method creates a file, and if the content matches the expected
+        CardGame.writeToFile(content, "testingFile.txt", true);
+        assertTrue(Files.exists(path), "File exists");
+        assertEquals(content.toString(), Files.readString(path), "File content matches");
 
-        var player4 = new Player(4);
-        player4.addCard(new Card(1));
-        player4.addCard(new Card(3));
-        player4.addCard(new Card(2));
-        player4.addCard(new Card(3));
-
-        List<Player> players = new ArrayList<>();
-        players.add(player1);
-        players.add(player2);
-        players.add(player3);
-        players.add(player4);
-
-        var deck = new CardDeck(1);
-        deck.addCard(new Card(2));
-        deck.addCard(new Card(3));
-        deck.addCard(new Card(1));
-        deck.addCard(new Card(2));
-
-        var deck2 = new CardDeck(1);
-        deck2.addCard(new Card(2));
-        deck2.addCard(new Card(3));
-        deck2.addCard(new Card(1));
-        deck2.addCard(new Card(2));
-
-        var deck3 = new CardDeck(1);
-        deck3.addCard(new Card(2));
-        deck3.addCard(new Card(3));
-        deck3.addCard(new Card(1));
-        deck3.addCard(new Card(2));
-
-        var deck4 = new CardDeck(1);
-        deck4.addCard(new Card(2));
-        deck4.addCard(new Card(3));
-        deck4.addCard(new Card(1));
-        deck4.addCard(new Card(2));
-
-        List<CardDeck> decks = new ArrayList<>();
-        decks.add(deck);
-        decks.add(deck2);
-        decks.add(deck3);
-        decks.add(deck4);
-
-        Player.setDecks(decks);
-
-        CardGame.gameLoop(players);
-        assertEquals(players.size(), Thread.getAllStackTraces().size());
+        // Delete the test file after the test
+        Files.deleteIfExists(path);
     }
-     */
 
     @Test
     void readFileNotNull() {
@@ -153,8 +96,38 @@ class CardGameTest {
     }
 
     @Test
-    void readNonExistigFile() {
+    void readNonExistingFile() {
         ArrayList<String> notFile = CardGame.readFile("DoesNotExist.txt");
         assertEquals(notFile, new ArrayList<>());
+    }
+
+    @Test
+    void testGameLoop() {
+
+        // We start a game with the necessary components
+        List<Player> players = List.of(new Player(1), new Player(2), new Player(3), new Player(4), new Player(5), new Player(6));
+        List<CardDeck> decks = List.of(new CardDeck(1), new CardDeck(2), new CardDeck(3), new CardDeck(4), new CardDeck(5), new CardDeck(6));
+
+        Player.setDecks(decks);
+        CardGame.generateCards(6, "six.txt", players, decks);
+
+        // Check if the 6 players have been writing their moves to their respective files
+        assertFileRecentlyModified("outputFiles/player1_output.txt");
+        assertFileRecentlyModified("outputFiles/player2_output.txt");
+        assertFileRecentlyModified("outputFiles/player3_output.txt");
+        assertFileRecentlyModified("outputFiles/player4_output.txt");
+        assertFileRecentlyModified("outputFiles/player5_output.txt");
+        assertFileRecentlyModified("outputFiles/player6_output.txt");
+    }
+
+    private void assertFileRecentlyModified(String filePath) {
+        File file = new File(filePath);
+        assertTrue(file.exists(), "File exists");
+
+        long lastModified = file.lastModified();
+        long currentTime = System.currentTimeMillis();
+        long timeDifference = currentTime - lastModified;
+
+        assertTrue(timeDifference < 1000, "File has been recently modified");
     }
 }
