@@ -24,6 +24,7 @@ class CardGameTest {
         // Create a mock player and decks
         List<Player> players = List.of(new Player(1), new Player(2));
         List<CardDeck> decks = List.of(new CardDeck(1), new CardDeck(2));
+        Player.setDecks(decks);
 
         CardGame.generateCards(2, "two.txt", players, decks);
 
@@ -34,6 +35,26 @@ class CardGameTest {
         for (CardDeck deck : decks) {
             assertEquals(4, deck.getCards().size());
         }
+
+        int numOfOnes = 0;
+        int numOfTwos = 0;
+
+        for (CardDeck deck : decks) {
+            for (Card card : deck.getCards()) {
+                if (card.value() == 1) { numOfOnes++; }
+                else if (card.value() == 2) { numOfTwos++; }
+            }
+        }
+
+        for (Player player : players) {
+            for (Card card : player.getCards()) {
+                if (card.value() == 1) { numOfOnes++; }
+                else if (card.value() == 2) { numOfTwos++; }
+            }
+        }
+
+        assertEquals(8, numOfOnes);
+        assertEquals(8, numOfTwos);
     }
 
     @Test

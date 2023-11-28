@@ -29,11 +29,11 @@ public class CardDeck {
 
     public void addCard(Card newCard){
         cards.add(newCard);
-        auxCards.add(String.valueOf(newCard.cardValue()));
+        auxCards.add(String.valueOf(newCard.value()));
     }
 
     public void removeCard(Card card) {
         cards.remove(card);
-        auxCards.remove(String.valueOf(card.cardValue()));
+        auxCards.remove(String.valueOf(card.value()));
     }
 }

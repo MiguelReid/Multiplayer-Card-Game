@@ -9,7 +9,7 @@ class CardTest {
 
     @Test
     void getCardValue() {
-        var card = new Card(3);
-        assertEquals(3, card.cardValue());
+        Card card = new Card(3);
+        assertEquals(3, card.value());
     }
 }

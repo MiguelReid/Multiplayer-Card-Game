@@ -1,3 +1,3 @@
 package main;
 
-public record Card(int cardValue) { }
+public record Card(int value) { }

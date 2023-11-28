@@ -6,10 +6,8 @@ import java.util.*;
 public class CardGame {
 
     private static int winner;
-    String test;
 
-    public static void main(String[] args) {
-        initializeGame();
+    public static void main(String[] args) { initializeGame();
     }
 
     public static void setWinner(int newWinner) {
@@ -146,10 +144,10 @@ public class CardGame {
         // Checking and storing any winners
         for (Player player : players) {
             boolean hasWon = true;
-            int firstCard = player.getCards().get(0).cardValue();
+            int firstCard = player.getCards().get(0).value();
 
             for (Card card : player.getCards()) {
-                if (card.cardValue() != firstCard) {
+                if (card.value() != firstCard) {
                     hasWon = false;
                     break;
                 }
