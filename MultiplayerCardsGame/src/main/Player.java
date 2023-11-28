@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Player implements Runnable {
 
@@ -97,6 +98,15 @@ public class Player implements Runnable {
         // Using -1 as temporary value, code always identifies a discard card due to win-condition checking
         Card discardCard = new Card(-1);
 
+        Random rand = new Random();
+        do {
+            discardCard = cards.get(rand.nextInt(cards.size()));
+        } while (discardCard.value() == name);
+
+        removeCard(discardCard);
+        rightDeck.addCard(discardCard);
+
+        /*
         for (Card card : cards) {
             if (card.value() != name) {
                 discardCard = card;
@@ -106,7 +116,8 @@ public class Player implements Runnable {
                 rightDeck.addCard(card);
                 break;
             }
-        }
+        }*/
+
         int rightDeckName = name + 1;
         if (rightDeckName > decks.size()) {
             rightDeckName = 1;

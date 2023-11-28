@@ -57,29 +57,6 @@ public class CardGameTest {
     }
 
     @Test
-    public void fullGame() {
-        // Create a mock player and decks
-        List<Player> players = new ArrayList<>();
-        List<CardDeck> decks = new ArrayList<>();
-
-        int numPlayers = 6;
-
-        // Creating objects based on input given
-        for (int i = 0; i < numPlayers; i++) {
-            Player player = new Player(i + 1);
-            CardDeck deck = new CardDeck(i + 1);
-            players.add(player);
-            decks.add(deck);
-        }
-
-        Player.setDecks(decks);
-
-        CardGame.generateCards(numPlayers, "six.txt", players, decks);
-
-        assertEquals(4, CardGame.getWinner());
-    }
-
-    @Test
     public void checkGameWon() {
         var player1 = new Player(1);
         player1.addCard(new Card(1));

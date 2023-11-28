@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -52,6 +53,7 @@ public class PlayerTest {
         var player = new Player(4);
         var card = new Card(3);
         player.addCard(card);
+        assertNotNull(player.getCards());
         player.removeCard(card);
         assertEquals(player.getCards(), new ArrayList<>());
     }

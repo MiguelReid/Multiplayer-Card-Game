@@ -2,6 +2,18 @@ player 5 initial hand 3 3 6 5
 player 5 draws a 1 from deck 5
 player 5 discard a 3 to deck 6
 player 5 current hand is 3 6 5 1
+player 5 draws a 1 from deck 5
+player 5 discard a 3 to deck 6
+player 5 current hand is 6 5 1 1
+player 5 draws a 2 from deck 5
+player 5 discard a 2 to deck 6
+player 5 current hand is 6 5 1 1
+player 5 draws a 5 from deck 5
+player 5 discard a 1 to deck 6
+player 5 current hand is 6 5 1 5
+player 5 draws a 3 from deck 5
+player 5 discard a 1 to deck 6
+player 5 current hand is 6 5 5 3
 player 4 has informed player 5 that player 4 has won
 player 5 exits
-player 5 hand: 3 6 5 1
+player 5 hand: 6 5 5 3
