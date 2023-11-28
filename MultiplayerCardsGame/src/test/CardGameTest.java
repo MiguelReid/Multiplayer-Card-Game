@@ -4,6 +4,7 @@ import main.Card;
 import main.CardDeck;
 import main.CardGame;
 import main.Player;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -13,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,6 +35,30 @@ class CardGameTest {
         for (CardDeck deck : decks) {
             assertEquals(4, deck.getCards().size());
         }
+    }
+
+    @Test
+    @Order(1)
+    void fullGame() {
+        // Create a mock player and decks
+        List<Player> players = new ArrayList<>();
+        List<CardDeck> decks = new ArrayList<>();
+
+        int numPlayers = 6;
+
+        // Creating objects based on input given
+        for (int i = 0; i < numPlayers; i++) {
+            Player player = new Player(i + 1);
+            CardDeck deck = new CardDeck(i + 1);
+            players.add(player);
+            decks.add(deck);
+        }
+
+        Player.setDecks(decks);
+
+        CardGame.generateCards(numPlayers, "six.txt", players, decks);
+
+        assertEquals(4, CardGame.getWinner());
     }
 
     @Test
@@ -67,10 +93,8 @@ class CardGameTest {
         players.add(player3);
         players.add(player4);
 
-        CardGame.checkGameWon(players);
-
         // Verify that the player won
-        assertEquals(2, CardGame.getWinner());
+        assertEquals(true, CardGame.checkGameWon(players));
     }
 
     @Test
@@ -91,7 +115,7 @@ class CardGameTest {
 
     @Test
     void readFileNotNull() {
-        ArrayList<String> output = CardGame.readFile("MultiplayerCardsGame/four.txt");
+        ArrayList<String> output = CardGame.readFile("inputPacks/four.txt");
         assertNotEquals(output, new ArrayList<>());
     }
 
