@@ -46,16 +46,16 @@ public class Player implements Runnable {
     }
 
     private boolean checkWin() {
-        boolean flag = true;
+        boolean hasOneCardType = true;
         int firstCard = cards.get(0).cardValue();
 
         for (Card card : cards) {
             if (card.cardValue() != firstCard) {
-                flag = false;
+                hasOneCardType = false;
                 break;
             }
         }
-        return flag;
+        return hasOneCardType;
     }
 
     public void writeFinalOutput(int winner) {
@@ -90,7 +90,7 @@ public class Player implements Runnable {
 
         //Gets card from left and removes it from deck
         Card drawCard = leftDeck.getCards().get(0);
-        this.addCard(drawCard);
+        addCard(drawCard);
         leftDeck.removeCard(drawCard);
 
         // Identifies first card which is not preferred card
@@ -102,16 +102,19 @@ public class Player implements Runnable {
                 discardCard = card;
 
                 // Discarding card to right-hand side deck
-                this.removeCard(card);
+                removeCard(card);
                 rightDeck.addCard(card);
-                cards.remove(card);
                 break;
             }
+        }
+        int rightDeckName = name + 1;
+        if (rightDeckName > decks.size()) {
+            rightDeckName = 1;
         }
 
         // Creating and storing output lines
         String drawOutput = String.format("player %d draws a %d from deck %d\n", name, drawCard.cardValue(), name);
-        String discardOutput = String.format("player %d discard a %d to deck %d\n", name, discardCard.cardValue(), name + 1);
+        String discardOutput = String.format("player %d discard a %d to deck %d\n", name, discardCard.cardValue(), rightDeckName);
         String handOutput = String.format("player %d current hand is ", name) + String.join(" ", auxCards) + "\n";
 
         output.append(drawOutput);
