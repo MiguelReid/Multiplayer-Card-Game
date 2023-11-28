@@ -132,9 +132,9 @@ public class CardGameTest {
     }
 
     @Test
-    public void readFileNotNull() {
+    public void readFileLineCheck() {
         ArrayList<String> output = CardGame.readFile("inputPacks/four.txt");
-        assertNotEquals(output, new ArrayList<>());
+        assertEquals(32, output.size());
     }
 
     @Test
@@ -144,7 +144,7 @@ public class CardGameTest {
     }
 
     @Test
-    public void testGameLoop() {
+    public void gameLoop() {
 
         // We start a game with the necessary components
         List<Player> players = List.of(new Player(1), new Player(2), new Player(3), new Player(4), new Player(5), new Player(6));
