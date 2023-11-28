@@ -37,20 +37,20 @@ public class Player implements Runnable {
 
     public void addCard(Card newCard) {
         cards.add(newCard);
-        auxCards.add(String.valueOf(newCard.getCardValue()));
+        auxCards.add(String.valueOf(newCard.cardValue()));
     }
 
     public void removeCard(Card card) {
         cards.remove(card);
-        auxCards.remove(String.valueOf(card.getCardValue()));
+        auxCards.remove(String.valueOf(card.cardValue()));
     }
 
     private boolean checkWin() {
         boolean flag = true;
-        int firstCard = cards.get(0).getCardValue();
+        int firstCard = cards.get(0).cardValue();
 
         for (Card card : cards) {
-            if (card.getCardValue() != firstCard) {
+            if (card.cardValue() != firstCard) {
                 flag = false;
                 break;
             }
@@ -98,7 +98,7 @@ public class Player implements Runnable {
         Card discardCard = new Card(-1);
 
         for (Card card : cards) {
-            if (card.getCardValue() != name) {
+            if (card.cardValue() != name) {
                 discardCard = card;
 
                 // Discarding card to right-hand side deck
@@ -110,8 +110,8 @@ public class Player implements Runnable {
         }
 
         // Creating and storing output lines
-        String drawOutput = String.format("player %d draws a %d from deck %d\n", name, drawCard.getCardValue(), name);
-        String discardOutput = String.format("player %d discard a %d to deck %d\n", name, discardCard.getCardValue(), name + 1);
+        String drawOutput = String.format("player %d draws a %d from deck %d\n", name, drawCard.cardValue(), name);
+        String discardOutput = String.format("player %d discard a %d to deck %d\n", name, discardCard.cardValue(), name + 1);
         String handOutput = String.format("player %d current hand is ", name) + String.join(" ", auxCards) + "\n";
 
         output.append(drawOutput);

@@ -10,6 +10,6 @@ class CardTest {
     @Test
     void getCardValue() {
         var card = new Card(3);
-        assertEquals(3, card.getCardValue());
+        assertEquals(3, card.cardValue());
     }
 }

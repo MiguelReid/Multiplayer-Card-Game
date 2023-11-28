@@ -87,12 +87,12 @@ public class CardGame {
             return;
         }
 
-        Stack<Card> totalCards = new Stack<>();
+        Queue<Card> totalCards = new LinkedList<>();
         // Checking each line is a positive int and storing in a stack
         for (String line : inputPack) {
             try {
                 Card card = new Card(Integer.parseInt(line));
-                totalCards.push(card);
+                totalCards.offer(card);
 
                 if (Integer.parseInt(line) <= 0){
                     System.out.println("You entered an invalid inputPack - contains a card with value <= 0!");
@@ -110,7 +110,7 @@ public class CardGame {
         // Distribute cards to players in round-robin fashion
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < numberPlayers; j++) {
-                Card nextCard = totalCards.pop();
+                Card nextCard = totalCards.poll();
                 players.get(j).addCard(nextCard);
             }
         }
@@ -127,7 +127,7 @@ public class CardGame {
         // Distribute remaining cards to decks in round-robin fashion
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < numberPlayers; j++) {
-                Card nextCard = totalCards.pop();
+                Card nextCard = totalCards.poll();
                 decks.get(j).addCard(nextCard);
             }
         }
@@ -146,10 +146,10 @@ public class CardGame {
         // Checking and storing any winners
         for (Player player : players) {
             boolean hasWon = true;
-            int firstCard = player.getCards().get(0).getCardValue();
+            int firstCard = player.getCards().get(0).cardValue();
 
             for (Card card : player.getCards()) {
-                if (card.getCardValue() != firstCard) {
+                if (card.cardValue() != firstCard) {
                     hasWon = false;
                     break;
                 }
