@@ -7,14 +7,15 @@ public class CardGame {
 
     private static int winner;
 
-    public static void main(String[] args) { initializeGame();
+    public static void main(String[] args) {
+        initializeGame();
     }
 
     public static void setWinner(int newWinner) {
         winner = newWinner;
     }
 
-    public static int getWinner(){
+    public static int getWinner() {
         return winner;
     }
 
@@ -36,7 +37,7 @@ public class CardGame {
             try {
                 numPlayers = Integer.parseInt(numPlayersInput);
 
-                if (numPlayers <= 0){
+                if (numPlayers <= 0) {
                     System.out.println("Number of players must be > 0");
                     invalidInput = true;
                 }
@@ -48,9 +49,9 @@ public class CardGame {
 
         } while (invalidInput);
 
-        Scanner scanner = new Scanner(System.in);  // Create a Scanner object
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the name of the pack to load: ");
-        String packFilePath = scanner.nextLine();  // Read user input
+        String packFilePath = scanner.nextLine();
 
         // Creating objects based on input given
         for (int i = 0; i < numPlayers; i++) {
@@ -92,7 +93,7 @@ public class CardGame {
                 Card card = new Card(Integer.parseInt(line));
                 totalCards.offer(card);
 
-                if (Integer.parseInt(line) <= 0){
+                if (Integer.parseInt(line) <= 0) {
                     System.out.println("You entered an invalid inputPack - contains a card with value <= 0!");
                     initializeGame();
                     return;
@@ -194,7 +195,7 @@ public class CardGame {
                 }
 
                 // Write to an output file for each deck
-                for (CardDeck deck: Player.getDecks()) {
+                for (CardDeck deck : Player.getDecks()) {
                     List<String> auxCards = deck.getAuxCards();
                     int deckName = deck.getName();
 
@@ -238,7 +239,6 @@ public class CardGame {
             FileWriter writer = new FileWriter(filePath, dontOverwrite);
             writer.write(String.valueOf(text));
             writer.close();
-
         } catch (IOException e) {
             System.out.println("Error occurred writing to file: " + filePath);
             e.printStackTrace();

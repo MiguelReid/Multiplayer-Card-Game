@@ -106,18 +106,6 @@ public class Player implements Runnable {
         removeCard(discardCard);
         rightDeck.addCard(discardCard);
 
-        /*
-        for (Card card : cards) {
-            if (card.value() != name) {
-                discardCard = card;
-
-                // Discarding card to right-hand side deck
-                removeCard(card);
-                rightDeck.addCard(card);
-                break;
-            }
-        }*/
-
         int rightDeckName = name + 1;
         if (rightDeckName > decks.size()) {
             rightDeckName = 1;

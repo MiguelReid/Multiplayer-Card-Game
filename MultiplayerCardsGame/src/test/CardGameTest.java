@@ -19,44 +19,6 @@ import static org.junit.Assert.*;
 public class CardGameTest {
 
     @Test
-    public void generateCards() {
-        // Create a mock player and decks
-        List<Player> players = List.of(new Player(1), new Player(2));
-        List<CardDeck> decks = List.of(new CardDeck(1), new CardDeck(2));
-        Player.setDecks(decks);
-
-        CardGame.generateCards(2, "two.txt", players, decks);
-
-        for (Player player : players) {
-            assertEquals(4, player.getCards().size());
-        }
-
-        for (CardDeck deck : decks) {
-            assertEquals(4, deck.getCards().size());
-        }
-
-        int numOfOnes = 0;
-        int numOfTwos = 0;
-
-        for (CardDeck deck : decks) {
-            for (Card card : deck.getCards()) {
-                if (card.value() == 1) { numOfOnes++; }
-                else if (card.value() == 2) { numOfTwos++; }
-            }
-        }
-
-        for (Player player : players) {
-            for (Card card : player.getCards()) {
-                if (card.value() == 1) { numOfOnes++; }
-                else if (card.value() == 2) { numOfTwos++; }
-            }
-        }
-
-        assertEquals(8, numOfOnes);
-        assertEquals(8, numOfTwos);
-    }
-
-    @Test
     public void checkGameWon() {
         var player1 = new Player(1);
         player1.addCard(new Card(1));
@@ -94,7 +56,6 @@ public class CardGameTest {
 
     @Test
     public void writeToFile() throws IOException {
-
         var content = new StringBuilder("This is a test file");
         String pathAux = "outputFiles/testingFile.txt";
         Path path = Paths.get(pathAux);
@@ -109,15 +70,53 @@ public class CardGameTest {
     }
 
     @Test
+    public void readNonExistingFile() {
+        ArrayList<String> notFile = CardGame.readFile("DoesNotExist.txt");
+        assertEquals(notFile, new ArrayList<>());
+    }
+
+    @Test
     public void readFileLineCheck() {
         ArrayList<String> output = CardGame.readFile("inputPacks/four.txt");
         assertEquals(32, output.size());
     }
 
     @Test
-    public void readNonExistingFile() {
-        ArrayList<String> notFile = CardGame.readFile("DoesNotExist.txt");
-        assertEquals(notFile, new ArrayList<>());
+    public void generateCards() {
+        // Create a mock player and decks
+        List<Player> players = List.of(new Player(1), new Player(2));
+        List<CardDeck> decks = List.of(new CardDeck(1), new CardDeck(2));
+        Player.setDecks(decks);
+
+        CardGame.generateCards(2, "two.txt", players, decks);
+
+        for (Player player : players) {
+            assertEquals(4, player.getCards().size());
+        }
+
+        for (CardDeck deck : decks) {
+            assertEquals(4, deck.getCards().size());
+        }
+
+        int numOfOnes = 0;
+        int numOfTwos = 0;
+
+        for (CardDeck deck : decks) {
+            for (Card card : deck.getCards()) {
+                if (card.value() == 1) { numOfOnes++; }
+                else if (card.value() == 2) { numOfTwos++; }
+            }
+        }
+
+        for (Player player : players) {
+            for (Card card : player.getCards()) {
+                if (card.value() == 1) { numOfOnes++; }
+                else if (card.value() == 2) { numOfTwos++; }
+            }
+        }
+
+        assertEquals(8, numOfOnes);
+        assertEquals(8, numOfTwos);
     }
 
     @Test
