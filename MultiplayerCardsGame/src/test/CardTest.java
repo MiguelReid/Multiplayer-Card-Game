@@ -1,14 +1,14 @@
 package test;
 
 import main.Card;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-class CardTest {
+public class CardTest {
 
     @Test
-    void getCardValue() {
+    public void getCardValue() {
         Card card = new Card(3);
         assertEquals(3, card.value());
     }

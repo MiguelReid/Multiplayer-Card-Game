@@ -2,12 +2,6 @@ player 1 initial hand 2 2 2 1
 player 1 draws a 1 from deck 1
 player 1 discard a 2 to deck 2
 player 1 current hand is 2 2 1 1
-player 1 draws a 1 from deck 1
-player 1 discard a 2 to deck 2
-player 1 current hand is 2 1 1 1
-player 1 draws a 1 from deck 1
-player 1 discard a 2 to deck 2
-player 1 current hand is 1 1 1 1
-player 2 has informed player 1 that player 2 has won
+player 4 has informed player 1 that player 4 has won
 player 1 exits
-player 1 hand: 1 1 1 1
+player 1 hand: 2 2 1 1

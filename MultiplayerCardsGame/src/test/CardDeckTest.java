@@ -2,14 +2,15 @@ package test;
 
 import main.Card;
 import main.CardDeck;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
 
-class CardDeckTest {
+public class CardDeckTest {
 
     @Test
-    void addCard() {
+    public void addCard() {
         var deck = new CardDeck(3);
         var card = new Card(1);
         deck.addCard(card);
@@ -17,7 +18,7 @@ class CardDeckTest {
     }
 
     @Test
-    void removeCard() {
+    public void removeCard() {
         var deck = new CardDeck(3);
         var card = new Card(1);
         deck.addCard(card);
@@ -27,7 +28,7 @@ class CardDeckTest {
     }
 
     @Test
-    void getCards() {
+    public void getCards() {
         var deck = new CardDeck(3);
         var card1 = new Card(1);
         deck.addCard(card1);
@@ -43,7 +44,7 @@ class CardDeckTest {
     }
 
     @Test
-    void getAuxCards() {
+    public void getAuxCards() {
         var deck = new CardDeck(3);
         var card1 = new Card(1);
         deck.addCard(card1);
