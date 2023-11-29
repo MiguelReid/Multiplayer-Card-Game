@@ -1,7 +1,7 @@
 # Multiplayer-main.Card-Game
 ### How to run test suite
 - Access file in *MultiplayerCardsGame/src/test/TestSuite.java*
-- Run {public class TestSuite { }}
+- Run **public class TestSuite { }**
 - Our four tests will execute together
 
 ### About InputPacks
