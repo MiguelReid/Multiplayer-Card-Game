@@ -7,3 +7,6 @@
 ### About InputPacks
 - We have our own inputPacks in *MultiplayerCardsGame/src/inputPacks*
 - If using own packs to test simply replace the content with your cards
+
+### About OututPacks
+- The output packs are written in *MultiplayerCardsGame/src/outputFiles*
