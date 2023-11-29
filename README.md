@@ -6,4 +6,4 @@
 
 ### About InputPacks
 - We have our own inputPacks in *MultiplayerCardsGame/src/inputPacks*
-- If using own packs to test simply replace the contentwith your cards
+- If using own packs to test simply replace the content with your cards
