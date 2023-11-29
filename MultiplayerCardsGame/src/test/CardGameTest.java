@@ -57,7 +57,7 @@ public class CardGameTest {
     @Test
     public void writeToFile() throws IOException {
         var content = new StringBuilder("This is a test file");
-        String pathAux = "outputFiles/testingFile.txt";
+        String pathAux = "MultiplayerCardsGame/src/outputFiles/testingFile.txt";
         Path path = Paths.get(pathAux);
 
         // We check if the method creates a file, and if the content matches the expected
@@ -77,7 +77,7 @@ public class CardGameTest {
 
     @Test
     public void readFileLineCheck() {
-        ArrayList<String> output = CardGame.readFile("inputPacks/four.txt");
+        ArrayList<String> output = CardGame.readFile("MultiplayerCardsGame/src/inputPacks/four.txt");
         assertEquals(32, output.size());
     }
 
@@ -103,15 +103,21 @@ public class CardGameTest {
 
         for (CardDeck deck : decks) {
             for (Card card : deck.getCards()) {
-                if (card.value() == 1) { numOfOnes++; }
-                else if (card.value() == 2) { numOfTwos++; }
+                if (card.value() == 1) {
+                    numOfOnes++;
+                } else if (card.value() == 2) {
+                    numOfTwos++;
+                }
             }
         }
 
         for (Player player : players) {
             for (Card card : player.getCards()) {
-                if (card.value() == 1) { numOfOnes++; }
-                else if (card.value() == 2) { numOfTwos++; }
+                if (card.value() == 1) {
+                    numOfOnes++;
+                } else if (card.value() == 2) {
+                    numOfTwos++;
+                }
             }
         }
 
@@ -130,12 +136,12 @@ public class CardGameTest {
         CardGame.generateCards(6, "six.txt", players, decks);
 
         // Check if the 6 players have been writing their moves to their respective files
-        assertFileRecentlyModified("outputFiles/player1_output.txt");
-        assertFileRecentlyModified("outputFiles/player2_output.txt");
-        assertFileRecentlyModified("outputFiles/player3_output.txt");
-        assertFileRecentlyModified("outputFiles/player4_output.txt");
-        assertFileRecentlyModified("outputFiles/player5_output.txt");
-        assertFileRecentlyModified("outputFiles/player6_output.txt");
+        assertFileRecentlyModified("MultiplayerCardsGame/src/outputFiles/player1_output.txt");
+        assertFileRecentlyModified("MultiplayerCardsGame/src/outputFiles/player2_output.txt");
+        assertFileRecentlyModified("MultiplayerCardsGame/src/outputFiles/player3_output.txt");
+        assertFileRecentlyModified("MultiplayerCardsGame/src/outputFiles/player4_output.txt");
+        assertFileRecentlyModified("MultiplayerCardsGame/src/outputFiles/player5_output.txt");
+        assertFileRecentlyModified("MultiplayerCardsGame/src/outputFiles/player6_output.txt");
     }
 
     private void assertFileRecentlyModified(String filePath) {

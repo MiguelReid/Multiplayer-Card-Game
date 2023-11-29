@@ -68,7 +68,7 @@ public class CardGame {
     }
 
     public static void generateCards(int numberPlayers, String packFilePath, List<Player> players, List<CardDeck> decks) {
-        ArrayList<String> inputPack = readFile("inputPacks/" + packFilePath); // Reading inputPack
+        ArrayList<String> inputPack = readFile("MultiplayerCardsGame/src/inputPacks/" + packFilePath); // Reading inputPack
 
         if (inputPack.isEmpty()) {
             System.out.println("The input pack you entered does not exist.");
@@ -226,14 +226,14 @@ public class CardGame {
                 output.add(line);
 
         } catch (IOException e) {
-            // Returns empty if can't find file
+            // Returns empty if it can't find file
             return new ArrayList<>();
         }
         return output;
     }
 
     public static void writeToFile(StringBuilder text, String filePath, boolean dontOverwrite) {
-        filePath = "outputFiles/" + filePath;
+        filePath = "MultiplayerCardsGame/src/outputFiles/" + filePath;
 
         try {
             FileWriter writer = new FileWriter(filePath, dontOverwrite);
