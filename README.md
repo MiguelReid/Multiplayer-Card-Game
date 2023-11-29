@@ -2,7 +2,7 @@
 ### How to run test suite
 - Access file in *MultiplayerCardsGame/src/test/TestSuite.java*
 - Run **public class TestSuite { }**
-- Our four tests suites will execute together
+- Our four test classes will execute together
 
 ### About InputPacks
 - We have our own inputPacks in *MultiplayerCardsGame/src/inputPacks*
@@ -10,3 +10,6 @@
 
 ### About OututPacks
 - The output packs are written in *MultiplayerCardsGame/src/outputFiles*
+
+### Java Version
+We have used the SDK: openjdk-21
